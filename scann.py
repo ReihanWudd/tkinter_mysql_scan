@@ -91,6 +91,8 @@ def thisdatabase():
                 self.sendname()
        
             else:
+                #untuk menghapus isi dari entrynya
+                data_ent.delete(0,END)
                 #menampilkan labelnya 
                 info=Label(fr01 ,text="data belum terdaftar", font='Arial 20 ',bg="#5ac14e",fg="red")
                 info.place(relx=0.5, rely=0.5, anchor=CENTER)
