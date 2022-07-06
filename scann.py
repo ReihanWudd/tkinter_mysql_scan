@@ -122,6 +122,8 @@ def tampilan01():
     #untuk bind ini fungsinya agar saat di enter langsung menjalankan function firstdata
     data_ent.bind('<Return>',firstdata)
     data_ent.place(relx=0.5, rely=0.4, anchor=CENTER)
+    #untuk otomatis cursor pada widged entry
+    data_ent.focus_set()
     logos = Label(fr01,text="E-Voting Machine",font="arial 20",bg="#5ac14e",fg="white") 
     logos.place(relx=0.2, rely=0.9, anchor=CENTER)
     
