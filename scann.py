@@ -1,4 +1,4 @@
-from email.mime import image
+# from email.mime import image
 from tkinter import *
 from tkinter.font import BOLD
 import ttkbootstrap as ttk
@@ -27,7 +27,7 @@ def thisdatabase():
         def sendname(self):
             global hasil2
             try:
-                db_connection= MySQLdb.connect("localhost","root","","ouruser")
+                db_connection= MySQLdb.connect("localhost","root","","ektp")
             except:
                 print("Can't connect to database")
                 return 0
@@ -47,17 +47,18 @@ def thisdatabase():
             db_connection.close()
 
             #ini hanya variabel penampung string pengecekan
-            cek = "('sudah memilih',)"
+            cek = "('0',)"
             #tampilan02() fungsinya untuk berpindah ke page 2 dengan mengirim parameter hasil2[0]
             tampilan02(hasil2[0])
             #ini pengeeckan untuk status dari pengguna
             if(str(hasil3[0])== cek):
                 #ini label fungsinya untuk menampilkan tulisan di windownya
-                info2=Label(fr02 ,text="Sudah melakukan pemilihan", font='Arial 20 ',bg="#2172bd",fg="white")
+                info2=Label(fr02 ,text="Belum melakukan pemilihan", font='Arial 20 ',bg="#2172bd",fg="red")
                 info2.place(relx=0.5, rely=0.6, anchor=CENTER)
             else:
+                print(hasil3[0])
                 #sama
-                info2=Label(fr02 ,text="Belum melakukan pemilihan", font='Arial 20 ',bg="#2172bd",fg="red")
+                info2=Label(fr02 ,text="Sudah melakukan pemilihan", font='Arial 20 ',bg="#2172bd",fg="white")
                 info2.place(relx=0.5, rely=0.6, anchor=CENTER)
 
 
@@ -65,7 +66,7 @@ def thisdatabase():
             global info
             #koneksi database, untuk alamat,user,database nya bisa disesuaikan 
             try:
-                db_connection= MySQLdb.connect("localhost","root","","ouruser")
+                db_connection= MySQLdb.connect("localhost","root","","ektp")
             # If connection is not successful
             except:
                 print("Can't connect to database")
@@ -84,14 +85,14 @@ def thisdatabase():
             db_connection.commit()
             db_connection.close()
             #ini fungsi nya variabel penampung string untuk di cek
-            str_get = "(("+self.code+",),)"
+            str_get = "(('"+self.code+"',),)"
             #pengecekan berdasarkan inputan code dari user dan juga code pada database
             if (str(hasil) == str_get):
                 #ini untuk menjalankan function send name diatas
                 self.sendname()
        
             else:
-                #untuk menghapus isi dari entrynya
+                print(hasil)
                 data_ent.delete(0,END)
                 #menampilkan labelnya 
                 info=Label(fr01 ,text="data belum terdaftar", font='Arial 20 ',bg="#5ac14e",fg="red")
@@ -102,7 +103,7 @@ def firstdata(x):
     #untuk menjalankan fungsi class nya
     thisdatabase()
     #untuk memanggil class ourdatabse dan juga nilai di dalam kurung akan di kirim ke parameter class secara berurutan
-    resultdata= ourdatabase(data_ent.get(),"select code from data_user where code="+data_ent.get(),1,"select name from data_user where code="+data_ent.get(),"select status from data_user where code="+data_ent.get())
+    resultdata= ourdatabase(data_ent.get(),"select id_user from t_user where id_user="+data_ent.get(),1,"select fullname from t_user where id_user="+data_ent.get(),"select status from t_user where id_user="+data_ent.get())
     #untuk memanggil fungsi mysqlconnect() pada class ourdatabase
     resultdata.mysqlconnect()
 
@@ -122,7 +123,6 @@ def tampilan01():
     #untuk bind ini fungsinya agar saat di enter langsung menjalankan function firstdata
     data_ent.bind('<Return>',firstdata)
     data_ent.place(relx=0.5, rely=0.4, anchor=CENTER)
-    #untuk otomatis cursor pada widged entry
     data_ent.focus_set()
     logos = Label(fr01,text="E-Voting Machine",font="arial 20",bg="#5ac14e",fg="white") 
     logos.place(relx=0.2, rely=0.9, anchor=CENTER)
@@ -145,8 +145,8 @@ def tampilan02(hsl):
 
     #untuk fungsi dari perpindahan halaman sebernarnya cuma memanggil function tampilan03() saja karena sudah otomatis ganti halaman
     #contoh jika memakai button
-    # btn_page3 = Button(fr02,text="next >>" ,command=tampilan03)
-    # btn_page3.place(relx=0.5, rely=0.53, anchor=CENTER)
+    btn_page3 = Button(fr02,text="next >>" ,command=tampilan03)
+    btn_page3.place(relx=0.5, rely=0.53, anchor=CENTER)
     #jadi perpindahannya hanya menggunakan command=tampilan03 saja
     
     data_ent2 = Entry(fr02,width=25,font="arial 19")
