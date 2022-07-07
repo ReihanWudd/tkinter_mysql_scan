@@ -38,32 +38,18 @@ def thisdatabase():
                 my_sql2 = self.command2
                 insertdt2.execute(my_sql2)
                 hasil2 = insertdt2.fetchone()
-                my_sql3 = self.command3
-                insertdt2.execute(my_sql3)
-                hasil3 = insertdt2.fetchall()
+
             except:
                 print("error")
             db_connection.commit()
             db_connection.close()
 
-            #ini hanya variabel penampung string pengecekan
-            cek = "('0',)"
             #tampilan02() fungsinya untuk berpindah ke page 2 dengan mengirim parameter hasil2[0]
             tampilan02(hasil2[0])
             #ini pengeeckan untuk status dari pengguna
-            if(str(hasil3[0])== cek):
-                #ini label fungsinya untuk menampilkan tulisan di windownya
-                info2=Label(fr02 ,text="Belum melakukan pemilihan", font='Arial 20 ',bg="#2172bd",fg="red")
-                info2.place(relx=0.5, rely=0.6, anchor=CENTER)
-            else:
-                print(hasil3[0])
-                #sama
-                info2=Label(fr02 ,text="Sudah melakukan pemilihan", font='Arial 20 ',bg="#2172bd",fg="white")
-                info2.place(relx=0.5, rely=0.6, anchor=CENTER)
-
 
         def mysqlconnect(self):
-            global info
+            global info,hasil3
             #koneksi database, untuk alamat,user,database nya bisa disesuaikan 
             try:
                 db_connection= MySQLdb.connect("localhost","root","","ektp")
@@ -79,6 +65,9 @@ def thisdatabase():
                 my_sql = self.command
                 insertdt.execute(my_sql)
                 hasil = insertdt.fetchall()
+                my_sql3 = self.command3
+                insertdt.execute(my_sql3)
+                hasil3 = insertdt.fetchall()
             except:
                 print("error")
 
@@ -86,17 +75,26 @@ def thisdatabase():
             db_connection.close()
             #ini fungsi nya variabel penampung string untuk di cek
             str_get = "(('"+self.code+"',),)"
+
             #pengecekan berdasarkan inputan code dari user dan juga code pada database
-            if (str(hasil) == str_get):
+            if (str(hasil) == str_get and str(hasil3[0])=="('0',)"):
                 #ini untuk menjalankan function send name diatas
                 self.sendname()
-       
+            elif(str(hasil) == str_get and str(hasil3[0])=="('1',)"):
+                data_ent.delete(0,END)
+                #menampilkan labelnya 
+                info=Label(fr01 ,text="data sudah terdaftar", font='Arial 20 ',bg="#5ac14e",fg="white")
+                info.place(relx=0.5, rely=0.5, anchor=CENTER)
+                info2=Label(fr01 ,text="Sudah melakukan pemilihan", font='Arial 20 ',bg="#5ac14e",fg="red")
+                info2.place(relx=0.5, rely=0.6, anchor=CENTER)
             else:
                 print(hasil)
                 data_ent.delete(0,END)
                 #menampilkan labelnya 
                 info=Label(fr01 ,text="data belum terdaftar", font='Arial 20 ',bg="#5ac14e",fg="red")
                 info.place(relx=0.5, rely=0.5, anchor=CENTER)
+                info2=Label(fr01 ,text="Belum melakukan pemilihan", font='Arial 20 ',bg="#5ac14e",fg="red")
+                info2.place(relx=0.5, rely=0.6, anchor=CENTER)
 
 
 def firstdata(x):
@@ -130,7 +128,7 @@ def tampilan01():
 def tampilan02(hsl):
     fr01.place_forget() 
     root.configure(bg="#2172bd")
-    global fr02,data_ent2,img
+    global fr02,data_ent2,imgnya
     fr02 = Frame(root,width=900,height=600,bg="#2172bd")
     fr02.place(relx=0.5, rely=0.5, anchor=CENTER)
 
@@ -139,14 +137,14 @@ def tampilan02(hsl):
     tlt=Label(fr02, text="SILAHKAN SCAN JARI ANDA",bg="#2172bd",fg="white", font='Arial 25 bold')
     tlt.place(relx=0.5, rely=0.1, anchor=CENTER)
     #fungsinya untuk memanggil file gambarnya bisa di edit directory filenya
-    img = PhotoImage(file="D:/coding/2022/python/fingerprint2.png")
-    finger_lbl = Label(fr02,image=img,bg="#2172bd")
-    finger_lbl.place(relx=0.5,rely=0.3,anchor=CENTER)
+    imgnya = PhotoImage(file="D:/coding/2022/python/fingerprint2.png")
+    # finger_lbl = Label(fr02,image=img,bg="#2172bd")
+    # finger_lbl.place(relx=0.5,rely=0.3,anchor=CENTER)
 
     #untuk fungsi dari perpindahan halaman sebernarnya cuma memanggil function tampilan03() saja karena sudah otomatis ganti halaman
     #contoh jika memakai button
-    btn_page3 = Button(fr02,text="next >>" ,command=tampilan03)
-    btn_page3.place(relx=0.5, rely=0.53, anchor=CENTER)
+    btn_page3 = Button(fr02,image=imgnya ,command=tampilan03,bg="#2172bd",borderwidth=0)
+    btn_page3.place(relx=0.5, rely=0.3, anchor=CENTER)
     #jadi perpindahannya hanya menggunakan command=tampilan03 saja
     
     data_ent2 = Entry(fr02,width=25,font="arial 19")
@@ -159,7 +157,7 @@ def tampilan02(hsl):
 def tampilan03():
     fr02.place_forget() 
     root.configure(bg="#ff5f01")
-    global fr03,data_ent,img
+    global fr03,data_ent
     fr03 = Frame(root,width=900,height=600,bg="#ff5f01")
     fr03.place(relx=0.5, rely=0.6, anchor=CENTER)
 
